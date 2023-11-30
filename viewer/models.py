@@ -63,7 +63,8 @@ class Rating(Model):
     rating = IntegerField(null=False, blank=False)
 
     def __str__(self):
-         return  f' {self.rating}% for {self.movie} by {self.user}'
+        #return  f' {self.rating}% for {self.movie} by {self.user}'
+        return f'{self.movie} - {self.rating}% by {self.user}'
 
 class Comment(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
@@ -74,8 +75,8 @@ class Comment(Model):
     def __str__(self):
         # TODO: definovat __str__
         if len(self.comment) > 30:
-            return f'{self.movie} - {self.user}: {self.comment[:50]}...'
-        return f'{self.movie} - {self.user}: {self.comment}'
+            return f'{self.movie}: {self.user} - {self.comment[:50]}...'
+        return f'{self.movie}: {self.user} - {self.comment}'
 
 class Image(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
