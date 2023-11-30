@@ -54,16 +54,16 @@ class Movie(Model):
         if self.title_sk:
             return f"{self.title_sk}({self.year})"
         elif self.title_cz:
-            return f"{self.title_cz}({self.year}"
+            return f"{self.title_cz}({self.year})"
 
-        return f"{self.title_orig}({self.year}"
+        return f"{self.title_orig}({self.year})"
 class Rating(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
     user = ForeignKey(User, null=True, on_delete=SET_NULL)
     rating = IntegerField(null=False, blank=False)
 
     def __str__(self):
-         return  f'Rating {self.rating} for {self.movie}'
+         return  f' {self.rating}% for {self.movie} by {self.user}'
 
 class Comment(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
@@ -73,9 +73,9 @@ class Comment(Model):
 
     def __str__(self):
         # TODO: definovat __str__
-        if len(self.comment) > 15:
-            return f'{self.user}:{self.comment[:15]}...'
-        return f'{self.user}:{self.comment}'
+        if len(self.comment) > 30:
+            return f'{self.movie} - {self.user}: {self.comment[:50]}...'
+        return f'{self.movie} - {self.user}: {self.comment}'
 
 class Image(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
@@ -84,4 +84,4 @@ class Image(Model):
 
     # TODO: definovat __str__
     def __str__(self):
-        return f'{self.movie} - image'
+        return f'{self.movie} - {self.description[:50]}'
