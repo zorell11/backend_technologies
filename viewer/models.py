@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Model, CharField, ForeignKey, IntegerField, TextField, DateField, DO_NOTHING, ManyToManyField, SET_NULL
+from django.db.models import Model, CharField, ForeignKey, IntegerField, TextField, DateField, DO_NOTHING, ManyToManyField, SET_NULL, DateTimeField
 
 from django.contrib.auth.models import User
 
@@ -26,6 +26,8 @@ class Person(Model):
     last_name = CharField(max_length=32, null=False, blank=False)
     birth_date = DateField(null=True, blank=True)
     biography = TextField(null=True, blank=True)
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['last_name', 'first_name', 'birth_date']
@@ -47,6 +49,8 @@ class Movie(Model):
     #  TODO images
     video = CharField(max_length=128, null=True, blank=True)
     description = TextField(null=True, blank=True)
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
 
     # TODO: pokud existuje český/slovenksý název, tak ho zobrazit, jinak originální + do závorky zobrazit rok)
     # Příklad: Forrest Gump (1994)
@@ -70,6 +74,7 @@ class Comment(Model):
     movie = ForeignKey(Movie, on_delete=DO_NOTHING, null=False, blank=False)
     user = ForeignKey(User, null=True, on_delete=SET_NULL)
     comment = TextField(null=False, blank=False)
+    created = DateTimeField(auto_now_add=True)
 
 
     def __str__(self):

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+
+    <h2>{{ movie.title_orig }}</h2>
+
+    <div>Orginalny nazov: {{ movie.title_orig }}</div>
+    {% if movie.title_sk %}
+        <div>Slovensky nazov: {{ movie.title_sk }}</div>
+    {% endif %}
+    {% if movie.title_sk %}
+        <div>Cesky nazov: {{ movie.title_cz }}</div>
+    {% endif %}
+
+    <div>Rok: {{ movie.year }}</div>
+    <div>Krajina:
+        {% for country in movie.countries.all %}
+            {{ country }}
+        {% endfor %}
+    </div>
+    <div>Zanry:
+        {% for genre in movie.genres.all %}
+            {{ genre }}
+        {% endfor %}
+    </div>
+    <dev>Rezia:
+        {% for director in movie.directors.all %}
+            {{ director }}
+        {% endfor %}
+    </dev>
+    <dev>
+        Herci:
+        {% for actor in movie.actors.all %}
+            {{ actor }}
+        {% endfor %}
+    </dev>
+    <div>Popis: {{ movie.description }}</div>
+
+    <div>Priemerne hodnotenie:
+        {% if avg_rating %}
+            {{ avg_rating.rating__avg }}
+        {% else %}
+            Zatail ziadne hodnotenie.
+        {% endif %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+        {% if user_rating %}
+            Vase hodnotenie je: {{ user_rating.rating }}
+        {% endif %}
+
+    <form action="{% url 'rate_movie' %}" method="post">
+        {% csrf_token %}
+        <label for="rating">Hodnotenie filmu:</label>
+        <input type="number" name="rating" id="rating" min="0" max="100">
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+        <input type="submit" value="Odoslat hodnotenie">
+    </form>
+    {% endif %}
+
+
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'add_comment' %}" method="post">
+        {% csrf_token %}
+        <label for="rating">Pridat komentar:</label>
+        <div>
+            <textarea name="comment" cols="100" rows="5"></textarea>
+        </div>
+        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+        <input type="submit" value="Odoslat komentar">
+    </form>
+    {% endif %}
+
+    <h3>Kommentare k filmu:</h3>
+    {% for comment in comments %}
+        <p>
+        {{ comment.comment }}
+        <h6><strong>{{ comment.user }}</strong></h6>
+         <h6>{{ comment.created }}</h6>
+        </p>
+        <hr>
+    {% endfor %}
+
+
+{% endblock %}
